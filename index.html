@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+    #loading {
+      border: 1.5px solid #000000;
+      width: 90%;
+      background-color: green;
+      animation: damage 2s linear;
+    }
+
+    span {
+      font-family: Monospace;
+    }
+
+    @keyframes damage {
+      100% {
+        background-color: green;
+        width: 90%;
+      }
+
+      80% {
+        background-color: orange;
+        width: 50%
+      }
+
+      50% {
+        background-color: red;
+        width: 20%
+      }
+
+      0% {
+        background-color: transparent;
+        width: 0%;
+      }
+    }
+
+    .stats {
+      margin: 25px 0 25px 10px;
+    }
+
+    .stats div {
+      margin: 3px;
+    }
+
+    .name {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .hit-me-btn {
+      width: 50%;
+      background-color: #4facfe;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1.5px solid black;
+      margin-top: 50px;
+    }
+
+    .hit-me-btn[disabled="y"] {
+      background-color: #3D7CB4;
+    }
+
+    .stats-parent {
+      display: none;
+      flex-direction: column;
+    }
+
+    .hit-btn {
+      display: none;
+    }
+
+    /* BODY */
+    body[status="on-battle-blue"] {
+      height: 100vh;
+      background: #0080FF;
+      /* Old browsers */
+      background: -moz-linear-gradient(-45deg, #0080FF 0%, #42445A 50%, #4FACFE 100%);
+      /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #0080ff), color-stop(50%, #42445A), color-stop(100%, #4fcacfe));
+      /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(-45deg, #0080FF 0%, #42445A 50%, #4FACFE 100%);
+      /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(-45deg, #0080FF 0%, #42445A 50%, #4FACFE 100%);
+      /* Opera 11.10+ */
+      background: -ms-linear-gradient(-45deg, #0080FF 0%, #42445A 50%, #4FACFE 100%);
+      /* IE10+ */
+      background: linear-gradient(135deg, #0080FF 0%, #42445A 50%, #4FACFE 100%);
+      /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0080FF', endColorstr='#4FACFE', GradientType=1);
+      /* IE6-9 fallback on horizontal gradient */
+      overflow-y: hidden;
+    }
+
+    /* PROLOGUE */
+    body[status="prologue"] {
+      height: 100vh;
+      background: #FFB477;
+      /* Old browsers */
+      background: -moz-linear-gradient(-45deg, #FF8623 0%, #FFB477 100%);
+      /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #FF8623), color-stop(100%, #FFB477));
+      /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(-45deg, #FF8623 0%, #FFB477 100%);
+      /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(-45deg, #FF8623 0%, #FFB477 100%);
+      /* Opera 11.10+ */
+      background: -ms-linear-gradient(-45deg, #FF8623 0%, #FFB477 100%);
+      /* IE10+ */
+      background: linear-gradient(135deg, #FF8623 0%, #FFB477 100%);
+      /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF8623', endColorstr='#FFB477', GradientType=1);
+      /* IE6-9 fallback on horizontal gradient */
+    }
+
+    .start-game-button {
+      background-color: #0080FF;
+      width: 50%;
+      margin: 0 auto;
+      padding: 10px;
+      border-radius: 7px;
+      animation: clip 2s infinite;
+      margin-top: 50px;
+    }
+
+    .start-game-button:hover {
+      box-shadow: 0 0 10px #60B0FF;
+      transform: scale(1.05);
+      transition-duration: .5s;
+      user-select: none;
+      -ms-user-select: none;
+    }
+
+    @keyframes clip {
+      0% {
+        color: black;
+      }
+
+      50% {
+        color: white;
+      }
+
+      100% {
+        color: black;
+      }
+    }
+
+    footer {
+      position: absolute;
+      bottom: 50px;
+      left: 0;
+      right: 0;
+    }
+
+    /* GREETING */
+    .greeting {
+      display: none;
+    }
+
+    .continue-btn {
+      color: blue;
+      margin-top: 15px;
+      animation: clip 2s infinite;
+    }
+
+    .continue-btn:hover {
+      color: blue;
+    }
+
+    .big-notifs {
+      z-index: 1000;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 30%;
+      animation: tes 1.5s ease-out;
+      display: none;
+    }
+
+    .status {
+      animation: tes 1.5s ease-out;
+      display: none;
+    }
+
+    .status[trans="fast"] {
+      animation: tes .3s ease-out;
+    }
+
+    @keyframes tes {
+      from {
+        transform: scale(0);
+        opacity: 0%;
+      }
+    }
+
+
+    @media only screen and(min-width:768px) {
+      .stats-parent {
+        display: flex;
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+
+<body status="prologue">
+  <div class="big-notifs">
+    <center>
+      <h1></h1>
+    </center>
+  </div>
+  <div class="stats-parent">
+    <div class="player-stats stats">
+      <div class="player-name name">Hai</div>
+      <div class="player-health health"><span>HP: </span><span>100</span>/<span>100</span></div>
+      <div class="player-atk atk"><span>ATK: </span><span>5</span></div>
+      <div class="loading" id="loading">&nbsp;</div>
+    </div>
+
+    <div class="boss-stats stats">
+      <div class="boss-name name">Hai</div>
+      <div class="boss-health health"><span>HP: </span><span>100</span>/<span>100</span></div>
+      <div class="bos-atk atk"><span>ATK: </span><span>5</span></div>
+      <div class="loading" id="loading">&nbsp;</div>
+    </div>
+
+    <div class="status">
+      <center>
+        <h1></h1>
+      </center>
+    </div>
+  </div>
+
+  <center class="hit-btn">
+    <div class="hit-me-btn" disabled="y" onclick="hitMe()">Hit Me</div>
+  </center>
+  <div class="main">
+    <center>
+      <h1 style="font-family:Monospace;font-weight:bolder;margin-top:50px;">
+        HIT GAME
+      </h1>
+    </center>
+
+    <center class="start-game-button" onclick="start()">
+      Start Game
+    </center>
+
+    <footer>
+      <center>Created by NINJA PEACE</center>
+    </footer>
+  </div>
+  <div class="greeting">
+    <div class="message">
+      <H1>Hi, {username}!</H1>Welcome to the Hit Game!<br>Beat all the bosses and be the champion.
+    </div>
+    <div class="continue-btn" onclick="startBattle()">Click Here to Continue ...</div>
+  </div>
+  <script>
+    this.player = { atk: 5 };
+    this.wave = 1;
+    this.enemy = {};
+
+    const bossList = [
+      { name: "Osis Sekolah", hp: 100, atk: 10 }
+    ];
+
+    function start() {
+      const usernamePrompt = prompt("Please enter your username ...\nMax. 20 letters (including spaces)");
+
+      if (usernamePrompt && usernamePrompt.length >= 1 && usernamePrompt.length <= 20) {
+        this.player.username = usernamePrompt;
+        document.getElementsByClassName("main")[0].style.display = "none";
+        document.getElementsByClassName("greeting")[0].style.display = "block";
+        document.getElementsByClassName("greeting")[0].children[0].children[0].innerText = document.getElementsByClassName("greeting")[0].children[0].children[0].innerText.replace("{username}", this.player.username);
+      } else if (!usernamePrompt) "";
+      else alert("Your username must not be empty and must not more than 20 letters long.")
+    }
+
+    function startBattle() {
+      document.getElementsByClassName("greeting")[0].style.display = "none";
+      document.body.setAttribute("status", "on-battle-blue");
+      document.getElementsByClassName("big-notifs")[0].children[0].children[0].innerText = `WAVE ${this.wave}`;
+      document.getElementsByClassName("big-notifs")[0].style.display = "block";
+      setTimeout(() => {
+        document.getElementsByClassName("big-notifs")[0].style.display = "none";
+        document.getElementsByClassName("stats-parent")[0].style.display = "flex";
+        document.getElementsByClassName("boss-name")[0].innerText = bossList[this.wave - 1].name;
+        this.enemy = bossList[this.wave - 1];
+        this.enemy.fullhp = this.enemy.hp;
+        setTimeout(() => {
+          turn()
+        }, 3000)
+      }, 2000);
+
+      function turn(who) {
+        const numRan = Math.floor(Math.random() * 5000);
+
+        if (who === "player" || numRan % 2 == 0) {
+          document.getElementsByClassName("status")[0].children[0].children[0].innerText = "YOUR TURN!";
+          document.getElementsByClassName("status")[0].style.display = "block";
+          document.getElementsByClassName("hit-btn")[0].style.display = "block";
+          setTimeout(() => {
+            document.getElementsByClassName("status")[0].setAttribute("trans", "fast");
+            document.getElementsByClassName("status")[0].children[0].children[0].innerText = "3";
+            setTimeout(() => {
+              document.getElementsByClassName("status")[0].children[0].children[0].innerText = "2";
+              setTimeout(() => {
+                document.getElementsByClassName("status")[0].children[0].children[0].innerText = "1";
+                setTimeout(() => {
+                  document.getElementsByClassName("hit-me-btn")[0].removeAttribute("disabled");
+                  document.getElementsByClassName("status")[0].children[0].children[0].innerText = "";
+                }, 500);
+              }, 500)
+            }, 500)
+          }, 2000)
+        } else if (who == "enemy" || numRan % 2 != 0) {
+          document.getElementsByClassName("status")[0].children[0].children[0].innerText = "ENEMY'S TURN!";
+          document.getElementsByClassName("status")[0].style.display = "block";
+        }
+      }
+    }
+
+    function hitMe() {
+      if (!document.getElementsByClassName("hit-me-btn")[0].getAttribute("disabled")) {
+        const choice = ["dodge", "hit", "half"][Math.floor(Math.random() * 3)];
+
+        if (choice == "hit") {
+          this.enemy.hp -= this.player.atk;
+          document.getElementsByClassName("boss-stats")[0].children[3].style.width = `${Math.floor(this.enemy.hp / this.enemy.fullhp * 90)}%`;
+          document.getElementsByClassName("status")[0].children[0].children[0].innerText = "HIT!";
+        } else if (choice == "dodge") {
+          document.getElementsByClassName("status")[0].children[0].children[0].innerText = "DODGE!";
+        } else if (choice == "half") {
+          this.enemy.hp -= this.player.atk / 2;
+          document.getElementsByClassName("boss-stats")[0].children[3].style.width = `${Math.floor(this.enemy.hp / this.enemy.fullhp * 90)}%`;
+          document.getElementsByClassName("status")[0].children[0].children[0].innerText = "PARTIAL HIT!";
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
